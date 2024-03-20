@@ -1,0 +1,74 @@
+\documentclass[12pt]{article}
+
+\usepackage[ptm]{mathptmx}
+\usepackage{setspace}
+\usepackage[export]{adjustbox}
+\usepackage[export]{adjustbox}
+\usepackage{fullpage}
+\usepackage[margin=1in]{geometry}
+\usepackage{csquotes}
+
+\graphicspath{ {/home/cse13s/asgn1/} }
+\setstretch{1.5}
+\setlength\parindent{24pt}
+
+\begin{document}
+
+\flushright
+Nicolas Corfmat \\CSE13S, Winter 2023 \\ ncorfmat@ucsc.edu
+
+\flushleft
+\LARGE
+\textbf{\\Exploring $\pi$ Using The Monte Carlo Method}
+\large
+\\\textit{Getting Acquainted with UNIX and C}
+
+\large
+\textbf{\\Description of Program}
+\normalsize
+\\This bash script produces plots of the given C program, which generates a predetermined amount of random two-dimensional points and graphs them. One plot demonstrates the number of points that fall within a quarter circle inscribed within a square and denotes them with the color blue, and red otherwise. The other plot displays the error values of the estimated $\pi$ value as the number of iterations increases.
+
+\large
+\textbf{\\Visualizing the Monte Carlo Method}
+\normalsize
+\\For those unfamiliar with the Monte Carlo method, IBM defines it as \enquote{a mathematical technique, which is used to estimate the possible outcomes of an uncertain event.} (IBM) Essentially, it relies on utilizing a large number of randomly generated data points and predicting an outcome based on long-term pattern(s). In this case, we'll be estimating the value of $\pi$ by plotting a predetermined sample of random, two-dimensional points, ranging from 0 to 1 (not including 1), and graphing them on a 1 by 1 square grid containing an inscribed quarter circle of radius 1). The program produces the first plot, highlighting points inside the circle as blue and red otherwise.
+
+\includegraphics[width=0.9\textwidth, center]{monte_carlo.pdf}
+
+The resulting graph reveals exactly what we had outlined---a plot of randomly generated and color-coded points. In order to create a data file consisting of solely pair coordinates, I used the UNIX \textit{tail} command to preserve the last \textit{n} number of lines. Essentially, I wanted to extract every line except the first, which were just labels indicating the kind of information listed in each column. Now that I had all the numerical data under one file, I utilized the \textit{awk} command to copy only the columns containing the X and Y coordinates and writing them into two separate files, depending on whether they fell within the circle or not. This required checking if the point was within the circle using an if-statement.
+
+\large
+\textbf{\\Monte Carlo Error Estimation}
+\normalsize
+\\The data produced from running \enquote{monte\_carlo.c} consists of an estimated $\pi$ values for each iteration. For the graph of the inscribed circle, we used a sample size of 100 points as this is what is considered statistically significant. However, in order to generate a precise value of $\pi$, we're going to need to increase our sample size substantially. By plotting the error value of $\pi$ (difference between estimated $\pi$ and actual $\pi$ value), we will be able to observe changes to our estimates.
+
+\includegraphics[width=0.9\textwidth, center]{error.pdf}
+
+As shown from this graph, the error value fluctuates around 0. It appears though, that as the number of iterations increases, the lines for all data sets gets increasingly closer to 0, implying that the estimated $\pi$ values do seem to approach its true value of $\pi$. If we look at the blue line, it might appear as if the data is incomplete for roughly the first 10 iterations. Perhaps the data file lacks these iterations? No. In reality, when the difference between the estimated $\pi$ and real $\pi$ values was calculated, the magnitude was large enough that it went beyond the given vertical range. This further solidifies the observation that the beginning iterations yield largely inaccurate $\pi$ estimations---a trend seen across all lines on the graph.
+
+\textbf{\\}
+Regarding the UNIX commands used to produce this plot, I again used \textit{awk} to retrieve the estimated $\pi$ values from the data file, and then subtracting the value of $\pi$ from it (accurate to 38 decimal places). Additionally, the \textit{tail} command ensured that I was ignoring the first line which only holds titles for each column.
+
+\textbf{\\}
+Undoubtedly the most important thing to implement in our \enquote{Monte Carlo Error Estimation} graph, is utilizing \textit{\$RANDOM} to generate four data files containing random seeds. Forgetting this step would yield four identical data files, rendering our trials useless. After this, all that was left was to save this data into different files and plot them.
+
+\large
+\textbf{\\Conclusion}
+\normalsize
+\\From this assignment, I learned that computer programs are helpful, if not imperative, in applying the Monte Carlo method to predict long-term mathematical trends---in this case, estimating the value of $\pi$. In regards to coding this with UNIX, I learned the importance of seeds during my experience coding the \textit{Monte Carlo Error Estimation}. This will prove essential in future coding projects that demand the use of generating randomness across different trials.
+
+\large
+\textbf{\\Credits}
+\normalsize
+\begin{itemize}
+\item In order to subtract $\pi$ from the estimated $\pi$ values in the Monte Carlo output data file, I used a version of Professor Long's code which he posted into the CSE 13S Discord server. I personally implemented the code that would perform this arithmetic on 4 different data files using different seeds.
+\end{itemize}
+
+\large
+\textbf{\\Citations}
+\normalsize
+\begin{itemize}
+\item\textit{IBM. (n.d.).}, What is Monte Carlo Simulation?, \textit{IBM}, Retrieved January 22, 2023, from https://www.ibm.com/topics/monte-carlo-simulation
+\end{itemize}
+
+\end{document}
